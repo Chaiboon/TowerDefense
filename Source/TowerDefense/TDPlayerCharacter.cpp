@@ -15,12 +15,15 @@ ATDPlayerCharacter::ATDPlayerCharacter()
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArmComponent->SetupAttachment(GetCapsuleComponent());
-	SpringArmComponent->bUsePawnControlRotation = true;
+	
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	HealthComponent = CreateDefaultSubobject<UTDHealthComponent>(TEXT("HealthComponent"));
+
+	SpringArmComponent->bUsePawnControlRotation = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -56,17 +59,26 @@ void ATDPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATDPlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATDPlayerCharacter::Look);
 	}
 }
 
 void ATDPlayerCharacter::Move(const FInputActionValue& Value)
 {
+	if (!Controller) return;
+
 	FVector2D InputValue = Value.Get<FVector2D>();
 	AddMovementInput(GetActorForwardVector(), InputValue.X * MoveSpeed);
 	AddMovementInput(GetActorRightVector(), InputValue.Y * MoveSpeed);
 }
 
-void ATDPlayerCharacter::Look()
+void ATDPlayerCharacter::Look(const FInputActionValue& Value)
 {
+	if (!Controller) return;
+
+	FVector2D InputValue = Value.Get<FVector2D>();
+	AddControllerYawInput(InputValue.X * LookSensitivity);
+	AddControllerPitchInput(InputValue.Y * LookSensitivity * -1);
 }
+
 

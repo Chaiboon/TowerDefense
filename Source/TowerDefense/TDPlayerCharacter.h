@@ -49,6 +49,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float MoveSpeed = 300.0f;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* LookAction;
+	UPROPERTY(EditAnywhere)
+	float LookSensitivity = 0.3f;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -57,5 +61,5 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Move(const FInputActionValue& Value);
-	void Look();
+	void Look(const FInputActionValue& Value);
 };
