@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/SplineComponent.h"
+
 #include "ATDEnemy.generated.h"
 
 UCLASS()
@@ -20,6 +22,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+
+	UPROPERTY(VisibleAnywhere)
+	USplineComponent* SplinePath;
+	UPROPERTY(EditAnywhere)
+	float MoveSpeed = 300.0f;
+	UPROPERTY(EditAnywhere)
+	float DistanceAlongSpline = 0.0f;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
