@@ -77,3 +77,4 @@ DerivedDataCache/*
 # UE5 World Partition auto-generated actor files
 Content/__ExternalActors__/
 Content/__ExternalLevelInstances__/
+Content/MonsterForSurvivalGame/*

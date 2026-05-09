@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Components/SplineComponent.h"
+#include "TDHealthComponent.h"
 
 #include "ATDEnemy.generated.h"
 
@@ -27,12 +28,14 @@ public:
 	USplineComponent* SplinePath;
 	UPROPERTY(EditAnywhere)
 	float MoveSpeed = 300.0f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	float DistanceAlongSpline = 0.0f;
+	UPROPERTY(VisibleAnywhere)
+	UTDHealthComponent* HealthComponent;
+	UPROPERTY(VisibleAnywhere)
+	float SplineLength;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void HandleDestroy();
 
 };
