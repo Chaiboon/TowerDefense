@@ -39,9 +39,24 @@ void AATDEnemy::Tick(float DeltaTime)
 	
 }
 
+float AATDEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	HealthComponent->TakeDamage(DamageAmount, DamageCauser);
+	return DamageAmount;
+}
+
 void AATDEnemy::HandleDestroy()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Charactor's base take damage"));
 	Destroy();
 }
+
+int32 AATDEnemy::GetGoldReward()
+{
+	return GoldReward;
+}
+
+
 
 

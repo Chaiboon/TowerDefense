@@ -36,6 +36,10 @@ public:
 	float SplineLength;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount,struct FDamageEvent const& DamageEvent,class AController* EventInstigator,AActor* DamageCauser) override;
 	void HandleDestroy();
-
+	int32 GetGoldReward();
+private:
+	UPROPERTY(EditAnywhere)
+	int32 GoldReward = 10;
 };

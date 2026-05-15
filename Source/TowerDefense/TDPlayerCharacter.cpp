@@ -29,7 +29,7 @@ ATDPlayerCharacter::ATDPlayerCharacter()
 void ATDPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Gold = 0;
 	PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController) 
 	{
@@ -78,6 +78,11 @@ void ATDPlayerCharacter::Look(const FInputActionValue& Value)
 	FVector2D InputValue = Value.Get<FVector2D>();
 	AddControllerYawInput(InputValue.X * LookSensitivity);
 	AddControllerPitchInput(InputValue.Y * LookSensitivity * -1);
+}
+
+void ATDPlayerCharacter::AddGold(int32 AddedGold)
+{
+	Gold += AddedGold;
 }
 
 

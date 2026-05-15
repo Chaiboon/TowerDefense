@@ -1,6 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TDHealthComponent.h"
+#include "TDPlayerCharacter.h"
+#include "ATDEnemy.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UTDHealthComponent::UTDHealthComponent()
@@ -31,7 +34,7 @@ void UTDHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
-void UTDHealthComponent::TakeDamage(float DamageAmount)
+void UTDHealthComponent::TakeDamage(float DamageAmount, AActor* DamageCauser)
 {
 	CurrentHealth -= DamageAmount;
 	if (CurrentHealth <= 0.0f) OnDeath();
@@ -39,6 +42,16 @@ void UTDHealthComponent::TakeDamage(float DamageAmount)
 
 void UTDHealthComponent::OnDeath()
 {
-	if (AActor* Owner = GetOwner()) Owner->Destroy();
+	if (AActor* Owner = GetOwner())
+	{
+		if (ATDPlayerCharacter* Player = Cast<ATDPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+		{
+			if (AATDEnemy* Enemy = Cast<AATDEnemy>(Owner))
+			{
+				Player->AddGold(Enemy->GetGoldReward());
+			}
+		}
+		Owner->Destroy();
+	}
 }
 

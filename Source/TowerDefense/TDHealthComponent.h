@@ -32,7 +32,7 @@ public:
 	ETDTeam team;
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	void TakeDamage(float DamageAmount);
+	void TakeDamage(float DamageAmount, AActor* DamageCauser);
 	void OnDeath();
 		
 };
