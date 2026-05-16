@@ -44,14 +44,14 @@ void UTDHealthComponent::OnDeath()
 {
 	if (AActor* Owner = GetOwner())
 	{
-		if (ATDPlayerCharacter* Player = Cast<ATDPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+		if (AATDEnemy* Enemy = Cast<AATDEnemy>(Owner))
 		{
-			if (AATDEnemy* Enemy = Cast<AATDEnemy>(Owner))
+			if (ATDPlayerCharacter* Player = Cast<ATDPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 			{
 				Player->AddGold(Enemy->GetGoldReward());
 			}
+			Enemy->HandleDestroy();
 		}
-		Owner->Destroy();
 	}
 }
 

@@ -2,6 +2,8 @@
 
 
 #include "ATDEnemy.h"
+#include "WaveSpawner.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AATDEnemy::AATDEnemy()
@@ -48,7 +50,15 @@ float AATDEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent,
 
 void AATDEnemy::HandleDestroy()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Charactor's base take damage"));
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AWaveSpawner::StaticClass(), FoundActors);
+	if (FoundActors.Num() > 0)
+	{
+		AWaveSpawner* Wave = Cast<AWaveSpawner>(FoundActors[0]);
+		if (Wave) Wave->AddCountEnemyDeath();
+	}
+
+	
 	Destroy();
 }
 
