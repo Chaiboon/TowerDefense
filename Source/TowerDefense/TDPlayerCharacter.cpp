@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TDTower.h"
 
 // Sets default values
 ATDPlayerCharacter::ATDPlayerCharacter()
@@ -29,7 +30,7 @@ ATDPlayerCharacter::ATDPlayerCharacter()
 void ATDPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	Gold = 0;
+
 	PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController) 
 	{
@@ -43,13 +44,6 @@ void ATDPlayerCharacter::BeginPlay()
 	}
 }
 
-// Called every frame
-void ATDPlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 // Called to bind functionality to input
 void ATDPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -59,6 +53,7 @@ void ATDPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATDPlayerCharacter::Move);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATDPlayerCharacter::Look);
+		EnhancedInputComponent->BindAction(BuildAction, ETriggerEvent::Triggered, this, &ATDPlayerCharacter::Build);
 	}
 }
 
@@ -80,9 +75,41 @@ void ATDPlayerCharacter::Look(const FInputActionValue& Value)
 	AddControllerPitchInput(InputValue.Y * LookSensitivity * -1);
 }
 
+void ATDPlayerCharacter::Build(const FInputActionValue& Value)
+{
+	if (!Controller) return;
+	if (!Buildable) return;
+
+	FTransform SpawnLocation = Buildable->GetActorTransform();
+	if (ATDTower* SpawnedTower = GetWorld()->SpawnActor<ATDTower>(ATDTower::StaticClass(), SpawnLocation))
+	{
+		int32 Cost = SpawnedTower->GetCost();
+		if (Gold >= Cost)
+		{
+			SpendGold(Cost);
+			Buildable->SetIsOccupied(true);
+			Buildable = nullptr;
+		}
+		else
+		{
+			SpawnedTower->Destroy();
+		}
+	}
+}
+
 void ATDPlayerCharacter::AddGold(int32 AddedGold)
 {
 	Gold += AddedGold;
+}
+
+void ATDPlayerCharacter::SpendGold(int32 SpentGold)
+{
+	Gold -= SpentGold;
+}
+
+void ATDPlayerCharacter::AssignBuildable(ABuildSpot* BuildableArea)
+{
+	this->Buildable = BuildableArea;
 }
 
 

@@ -37,6 +37,11 @@ void ATDTower::BeginPlay()
 }
 
 
+int32 ATDTower::GetCost()
+{
+	return Cost;
+}
+
 void ATDTower::AttackTick()
 {
 	SphereComponent->GetOverlappingActors(EnemiesInRange, AATDEnemy::StaticClass());

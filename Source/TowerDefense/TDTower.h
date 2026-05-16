@@ -41,8 +41,11 @@ public:
 	FVector TowerLocation;
 	UPROPERTY(VisibleAnywhere)
 	TArray<AActor*> EnemiesInRange;
+	int32 GetCost();
 	static const FDamageEvent DamageType;
 private:
+	UPROPERTY(EditAnywhere)
+	int32 Cost = 50;
 	FTimerHandle AttackTimerHandle;
 	void AttackTick();
 	AActor* GetClosestEnemyInRange(TArray<AActor*> Enemies);

@@ -14,6 +14,7 @@
 #include "ETDTeam.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
+#include "BuildSpot.h"
 
 #include "TDPlayerCharacter.generated.h"
 
@@ -46,24 +47,29 @@ public:
 	UInputMappingContext* DefaultMappingContext;
 	UPROPERTY(EditAnywhere,Category = "Input")
 	UInputAction* MoveAction;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* LookAction;
+	UPROPERTY(EditAnywhere,Category = "Input")
+	UInputAction* BuildAction;
 
 	UPROPERTY(EditAnywhere)
 	float MoveSpeed = 300.0f;
-	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* LookAction;
 	UPROPERTY(EditAnywhere)
 	float LookSensitivity = 0.3f;
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(VisibleAnywhere)
+	ABuildSpot* Buildable;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	void Build(const FInputActionValue& Value);
 	void AddGold(int32 AddedGold);
+	void SpendGold(int32 SpentGold);
+	void AssignBuildable(ABuildSpot* BuildableArea);
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	int32 Gold;
+	UPROPERTY(EditAnywhere)
+	int32 Gold=100;
 };
