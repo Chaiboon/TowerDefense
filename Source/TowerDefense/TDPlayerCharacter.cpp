@@ -42,6 +42,9 @@ void ATDPlayerCharacter::BeginPlay()
 			}
 		}
 	}
+
+	HUDWidget = CreateWidget<UTDHUDWidget>(PlayerController, HUDWidgetClass);
+	if (HUDWidget) HUDWidget->AddToViewport();
 }
 
 // Called to bind functionality to input
@@ -100,16 +103,49 @@ void ATDPlayerCharacter::Build(const FInputActionValue& Value)
 void ATDPlayerCharacter::AddGold(int32 AddedGold)
 {
 	Gold += AddedGold;
+	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
 }
 
 void ATDPlayerCharacter::SpendGold(int32 SpentGold)
 {
 	Gold -= SpentGold;
+	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
 }
 
 void ATDPlayerCharacter::AssignBuildable(ABuildSpot* BuildableArea)
 {
 	this->Buildable = BuildableArea;
+}
+
+void ATDPlayerCharacter::SetLives(int32 newLives)
+{
+	Lives = newLives;
+}
+
+void ATDPlayerCharacter::LoseLife()
+{
+	Lives--;
+	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
+	if (Lives <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You dead!"));
+	}
+}
+
+int32 ATDPlayerCharacter::GetLives()
+{
+	return Lives;
+}
+
+int32 ATDPlayerCharacter::GetCurrentWave()
+{
+	return CurrentWave;
+}
+
+void ATDPlayerCharacter::SetCurrentWave(int32 newWave)
+{
+	CurrentWave = newWave;
+	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
 }
 
 

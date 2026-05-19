@@ -35,7 +35,8 @@ public:
 	int32 CurrentWave = 0;
 	UPROPERTY(VisibleAnywhere)
 	int32 EnemiesSpawnedInCurrentWave = 0;
-	
+	UPROPERTY()
+	ATDPlayerCharacter* PlayerCharacter;
 	void AddCountEnemyDeath();
 private:
 	UFUNCTION()

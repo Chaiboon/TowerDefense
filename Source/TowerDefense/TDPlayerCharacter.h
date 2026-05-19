@@ -15,6 +15,7 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
 #include "BuildSpot.h"
+#include "TDHUDWidget.h"
 
 #include "TDPlayerCharacter.generated.h"
 
@@ -58,6 +59,10 @@ public:
 	float LookSensitivity = 0.3f;
 	UPROPERTY(VisibleAnywhere)
 	ABuildSpot* Buildable;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UTDHUDWidget> HUDWidgetClass;
+	UPROPERTY()
+	UTDHUDWidget* HUDWidget;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -68,8 +73,17 @@ public:
 	void AddGold(int32 AddedGold);
 	void SpendGold(int32 SpentGold);
 	void AssignBuildable(ABuildSpot* BuildableArea);
+	void SetLives(int32 newLives);
+	void LoseLife();
+	int32 GetLives();
+	int32 GetCurrentWave();
+	void SetCurrentWave(int32 newWave);
 
 private:
 	UPROPERTY(EditAnywhere)
 	int32 Gold=100;
+	UPROPERTY(EditAnywhere)
+	int32 Lives = 3;
+	UPROPERTY(VisibleAnywhere)
+	int32 CurrentWave = 1;
 };

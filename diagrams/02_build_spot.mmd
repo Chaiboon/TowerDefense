@@ -1,0 +1,11 @@
+flowchart TD
+    A[Player enters BoxCollision] --> B[OnBoxOverlap]
+    B --> C[Player->AssignBuildable this]
+    D[Player presses E] --> E{Buildable valid?}
+    E -->|No| F[return]
+    E -->|Yes| G[SpawnActor with FTransform]
+    G --> H{Gold >= GetCost?}
+    H -->|No| I[Destroy tower, return]
+    H -->|Yes| J[SpendGold]
+    J --> K[SetIsOccupied true]
+    K --> L[Buildable = nullptr]

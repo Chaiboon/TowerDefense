@@ -1,0 +1,17 @@
+flowchart TD
+    A[BeginPlay] --> B[SetTimer: SpawnEnemy]
+    B --> C[SpawnEnemy fires]
+    C --> D[SpawnActor EnemyClass]
+    D --> E[EnemiesSpawnedInCurrentWave++]
+    E --> F{Wave full?}
+    F -->|No| G[wait for next tick]
+    F -->|Yes| H[stop spawning]
+
+    I[Enemy: HandleDestroy] --> J[AddCountEnemyDeath]
+    J --> K[EnemyDeadCount++]
+    K --> L{All dead?}
+    L -->|No| M[wait]
+    L -->|Yes| N[Reset counter, CurrentWave++]
+    N --> O{CurrentWave >= TotalWaves?}
+    O -->|Yes| P[WIN]
+    O -->|No| Q[SetTimer next wave]

@@ -1,0 +1,13 @@
+flowchart TD
+    A[ATDTower::AttackTick] --> B[SphereComponent::GetOverlappingActors]
+    B --> C[GetClosestEnemyInRange]
+    C -->|No target| D[return]
+    C -->|Target found| E[Target->TakeDamage]
+    E --> F[ATDEnemy::TakeDamage override]
+    F --> G[Super::TakeDamage]
+    F --> H[TDHealthComponent::TakeDamage]
+    H --> I{CurrentHealth <= 0?}
+    I -->|No| J[done]
+    I -->|Yes| K[OnDeath]
+    K --> L[GetPlayerCharacter -> AddGold]
+    L --> M[Enemy->HandleDestroy]

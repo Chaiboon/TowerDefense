@@ -4,6 +4,7 @@
 #include "WaveSpawner.h"
 #include "TimerManager.h"
 #include "ATDEnemy.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWaveSpawner::AWaveSpawner()
@@ -19,6 +20,10 @@ void AWaveSpawner::BeginPlay()
 	Super::BeginPlay();
 	
 	GetWorldTimerManager().SetTimer(SpawnTimerHandle,this, &AWaveSpawner::SpawnEnemy, SpawnInterval, true);
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATDPlayerCharacter::StaticClass(), FoundActors);
+	if (FoundActors.Num() > 0) PlayerCharacter = Cast<ATDPlayerCharacter>(FoundActors[0]);
+	if (PlayerCharacter) PlayerCharacter->SetCurrentWave(CurrentWave+1);
 }
 
 void AWaveSpawner::AddCountEnemyDeath()
@@ -28,12 +33,15 @@ void AWaveSpawner::AddCountEnemyDeath()
 	{
 		EnemyDeadCount = 0;
 		CurrentWave++;
+		
 		if (CurrentWave >= TotalWaves)
 		{
 			GetWorldTimerManager().ClearTimer(SpawnTimerHandle);
+			UE_LOG(LogTemp, Warning, TEXT("You win"));
 		}
 		else
 		{
+			if (PlayerCharacter) PlayerCharacter->SetCurrentWave(CurrentWave+1);
 			GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &AWaveSpawner::SpawnEnemy, SpawnInterval, true);
 		}
 	}

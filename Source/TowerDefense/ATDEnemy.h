@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Components/SplineComponent.h"
 #include "TDHealthComponent.h"
+#include "TDPlayerCharacter.h"
 
 #include "ATDEnemy.generated.h"
 
@@ -39,7 +40,10 @@ public:
 	virtual float TakeDamage(float DamageAmount,struct FDamageEvent const& DamageEvent,class AController* EventInstigator,AActor* DamageCauser) override;
 	void HandleDestroy();
 	int32 GetGoldReward();
+
 private:
 	UPROPERTY(EditAnywhere)
 	int32 GoldReward = 10;
+	UPROPERTY()
+	ATDPlayerCharacter* PlayerCharacter;
 };

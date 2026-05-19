@@ -1,0 +1,9 @@
+flowchart TD
+    A[Game starts] --> B[Gold = 100 default]
+    C[Enemy killed by tower] --> D[OnDeath: AddGold GoldReward]
+    D --> E[Gold increases]
+    F[Player presses E] --> G[SpawnActor Tower]
+    G --> H[Read tower->GetCost]
+    H --> I{Gold >= Cost?}
+    I -->|Yes| J[SpendGold, tower stays]
+    I -->|No| K[Destroy tower, Gold unchanged]

@@ -22,7 +22,9 @@ void AATDEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	SplineLength = SplinePath->GetSplineLength();
-	
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATDPlayerCharacter::StaticClass(), FoundActors);
+	if (FoundActors.Num() > 0) PlayerCharacter = Cast<ATDPlayerCharacter>(FoundActors[0]);
 }
 
 // Called every frame
@@ -37,7 +39,11 @@ void AATDEnemy::Tick(float DeltaTime)
 	SetActorLocation(Location);
 	SetActorRotation(Rotation.Rotation());
 
-	if (DistanceAlongSpline >= SplineLength) HandleDestroy();
+	if (DistanceAlongSpline >= SplineLength) 
+	{
+		if(IsValid(PlayerCharacter)) PlayerCharacter->LoseLife();
+		HandleDestroy();
+	}
 	
 }
 
@@ -57,8 +63,6 @@ void AATDEnemy::HandleDestroy()
 		AWaveSpawner* Wave = Cast<AWaveSpawner>(FoundActors[0]);
 		if (Wave) Wave->AddCountEnemyDeath();
 	}
-
-	
 	Destroy();
 }
 

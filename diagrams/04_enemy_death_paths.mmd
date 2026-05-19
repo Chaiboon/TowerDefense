@@ -1,0 +1,13 @@
+flowchart TD
+    A[Tower kills enemy] --> B[TDHealthComponent::OnDeath]
+    B --> C[AddGold to player]
+    C --> D[Enemy->HandleDestroy]
+
+    E[Enemy reaches spline end] --> F[ATDPlayerCharacter::LoseLife]
+    F --> G{Lives <= 0?}
+    G -->|Yes| H[LOSE]
+    G -->|No| I[Enemy->HandleDestroy]
+
+    D --> J[WaveSpawner::AddCountEnemyDeath]
+    I --> J
+    J --> K[Destroy actor]
