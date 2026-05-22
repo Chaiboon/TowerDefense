@@ -37,7 +37,7 @@ void AWaveSpawner::AddCountEnemyDeath()
 		if (CurrentWave >= TotalWaves)
 		{
 			GetWorldTimerManager().ClearTimer(SpawnTimerHandle);
-			UE_LOG(LogTemp, Warning, TEXT("You win"));
+			if (PlayerCharacter) PlayerCharacter->ShowGameOver(true);
 		}
 		else
 		{

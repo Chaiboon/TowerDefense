@@ -16,6 +16,7 @@
 #include "EnhancedInputComponent.h"
 #include "BuildSpot.h"
 #include "TDHUDWidget.h"
+#include "TDGameOverWidget.h"
 
 #include "TDPlayerCharacter.generated.h"
 
@@ -63,6 +64,10 @@ public:
 	TSubclassOf<UTDHUDWidget> HUDWidgetClass;
 	UPROPERTY()
 	UTDHUDWidget* HUDWidget;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UTDGameOverWidget> GameOverWidgetClass;
+	UPROPERTY()
+	UTDGameOverWidget* GameOverWidget;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -78,10 +83,11 @@ public:
 	int32 GetLives();
 	int32 GetCurrentWave();
 	void SetCurrentWave(int32 newWave);
-
+	void SetGold(int32 newGold);
+	void ShowGameOver(bool bWon);
 private:
 	UPROPERTY(EditAnywhere)
-	int32 Gold=100;
+	int32 Gold = 100;
 	UPROPERTY(EditAnywhere)
 	int32 Lives = 3;
 	UPROPERTY(VisibleAnywhere)

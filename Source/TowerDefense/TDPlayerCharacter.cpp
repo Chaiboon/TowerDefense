@@ -44,7 +44,14 @@ void ATDPlayerCharacter::BeginPlay()
 	}
 
 	HUDWidget = CreateWidget<UTDHUDWidget>(PlayerController, HUDWidgetClass);
-	if (HUDWidget) HUDWidget->AddToViewport();
+	if (HUDWidget)
+	{
+		HUDWidget->AddToViewport();
+		HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
+	}
+
+	FInputModeGameOnly InputMode;
+	PlayerController->SetInputMode(InputMode);
 }
 
 // Called to bind functionality to input
@@ -126,10 +133,7 @@ void ATDPlayerCharacter::LoseLife()
 {
 	Lives--;
 	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
-	if (Lives <= 0)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("You dead!"));
-	}
+	if (Lives <= 0) ShowGameOver(false);
 }
 
 int32 ATDPlayerCharacter::GetLives()
@@ -146,6 +150,27 @@ void ATDPlayerCharacter::SetCurrentWave(int32 newWave)
 {
 	CurrentWave = newWave;
 	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
+}
+
+void ATDPlayerCharacter::SetGold(int32 newGold)
+{
+	Gold = newGold;
+	if (HUDWidget) HUDWidget->UpdateHUD(Gold, Lives, CurrentWave);
+}
+
+void ATDPlayerCharacter::ShowGameOver(bool bWon)
+{
+	GameOverWidget = CreateWidget<UTDGameOverWidget>(PlayerController, GameOverWidgetClass);
+	if (GameOverWidget)
+	{
+		GameOverWidget->bDidWin = bWon;
+		GameOverWidget->AddToViewport();
+
+		PlayerController->bShowMouseCursor = true;
+		PlayerController->FlushPressedKeys();
+		FInputModeUIOnly InputMode;
+		PlayerController->SetInputMode(InputMode);
+	}
 }
 
 
