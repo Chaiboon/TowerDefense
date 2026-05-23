@@ -3,6 +3,8 @@
 
 #include "TDTower.h"
 #include "ATDEnemy.h"
+#include "Kismet/GameplayStatics.h"
+#include "Math/UnrealMathUtility.h"
 
 
 const FDamageEvent ATDTower::DamageType;
@@ -11,7 +13,7 @@ const FDamageEvent ATDTower::DamageType;
 ATDTower::ATDTower()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	SetRootComponent(CapsuleComponent);
@@ -33,7 +35,27 @@ void ATDTower::BeginPlay()
 	
 	SphereComponent->SetSphereRadius(AttackRange);
 	TowerLocation = GetActorLocation();
-	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ATDTower::AttackTick, AttackInterval, true);
+	GetWorldTimerManager().SetTimer(AttackTimerHandle, this, &ATDTower::AttackCooldown, AttackInterval, true);
+}
+
+void ATDTower::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	SphereComponent->GetOverlappingActors(EnemiesInRange, AATDEnemy::StaticClass());
+	AATDEnemy* Target = Cast<AATDEnemy>(GetClosestEnemyInRange(EnemiesInRange));
+	if (!Target) return;
+
+	FRotator CurrentRotation = this->GetActorRotation();
+	FRotator TargetLocation = (Target->GetActorLocation() - this->GetActorLocation()).Rotation();
+	FRotator RotationThisTick = FMath::RInterpTo(CurrentRotation, TargetLocation, DeltaTime, RotationSpeed);
+	this->SetActorRotation(RotationThisTick);
+
+	if (!bIsAttackable) return;
+	
+	if (AttackSound) UGameplayStatics::PlaySoundAtLocation(GetWorld(), AttackSound, Target->GetActorLocation());
+	Target->TakeDamage(AttackDamage, DamageType, nullptr, this);
+	bIsAttackable = false;
 }
 
 
@@ -42,14 +64,9 @@ int32 ATDTower::GetCost()
 	return Cost;
 }
 
-void ATDTower::AttackTick()
+void ATDTower::AttackCooldown()
 {
-	SphereComponent->GetOverlappingActors(EnemiesInRange, AATDEnemy::StaticClass());
-	AATDEnemy* Target = Cast<AATDEnemy>(GetClosestEnemyInRange(EnemiesInRange));
-
-	if (!Target) return;
-	
-	Target->TakeDamage(AttackDamage,DamageType,nullptr,this);
+	bIsAttackable = true;
 }
 
 AActor* ATDTower::GetClosestEnemyInRange(TArray<AActor*> Enemies)

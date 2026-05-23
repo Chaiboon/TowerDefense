@@ -50,7 +50,6 @@ void AWaveSpawner::AddCountEnemyDeath()
 void AWaveSpawner::SpawnEnemy()
 {
 	if (!EnemyClass) return;
-
 	if (AATDEnemy* SpawnedEnemy = GetWorld()->SpawnActor<AATDEnemy>(EnemyClass, GetActorTransform()))
 	{
 		EnemiesSpawnedInCurrentWave++;

@@ -50,6 +50,7 @@ void UTDHealthComponent::OnDeath()
 			{
 				Player->AddGold(Enemy->GetGoldReward());
 			}
+			if(DeathSound) UGameplayStatics::PlaySoundAtLocation(GetWorld(), DeathSound, Owner->GetActorLocation());
 			Enemy->HandleDestroy();
 		}
 	}

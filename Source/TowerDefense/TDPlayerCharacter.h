@@ -17,6 +17,7 @@
 #include "BuildSpot.h"
 #include "TDHUDWidget.h"
 #include "TDGameOverWidget.h"
+#include "TDTower.h"
 
 #include "TDPlayerCharacter.generated.h"
 
@@ -68,6 +69,8 @@ public:
 	TSubclassOf<UTDGameOverWidget> GameOverWidgetClass;
 	UPROPERTY()
 	UTDGameOverWidget* GameOverWidget;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<ATDTower> TowerClass;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

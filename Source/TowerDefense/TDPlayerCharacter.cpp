@@ -91,7 +91,7 @@ void ATDPlayerCharacter::Build(const FInputActionValue& Value)
 	if (!Buildable) return;
 
 	FTransform SpawnLocation = Buildable->GetActorTransform();
-	if (ATDTower* SpawnedTower = GetWorld()->SpawnActor<ATDTower>(ATDTower::StaticClass(), SpawnLocation))
+	if (ATDTower* SpawnedTower = GetWorld()->SpawnActor<ATDTower>(TowerClass, SpawnLocation))
 	{
 		int32 Cost = SpawnedTower->GetCost();
 		if (Gold >= Cost)

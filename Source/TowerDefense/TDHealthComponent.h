@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "ETDTeam.h"
+#include "Sound/SoundBase.h"
 
 #include "TDHealthComponent.generated.h"
 
@@ -30,6 +31,8 @@ public:
 	float CurrentHealth;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	ETDTeam team;
+	UPROPERTY(EditAnywhere)
+	USoundBase* DeathSound;
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void TakeDamage(float DamageAmount, AActor* DamageCauser);

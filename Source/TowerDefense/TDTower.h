@@ -25,6 +25,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* CapsuleComponent;
 	UPROPERTY(VisibleAnywhere)
@@ -41,12 +42,17 @@ public:
 	FVector TowerLocation;
 	UPROPERTY(VisibleAnywhere)
 	TArray<AActor*> EnemiesInRange;
+	UPROPERTY(EditAnywhere)
+	USoundBase* AttackSound;
 	int32 GetCost();
 	static const FDamageEvent DamageType;
+	bool bIsAttackable = true;
+	UPROPERTY(EditAnywhere)
+	float RotationSpeed = 3.0f;
 private:
 	UPROPERTY(EditAnywhere)
 	int32 Cost = 50;
 	FTimerHandle AttackTimerHandle;
-	void AttackTick();
+	void AttackCooldown();
 	AActor* GetClosestEnemyInRange(TArray<AActor*> Enemies);
 };
