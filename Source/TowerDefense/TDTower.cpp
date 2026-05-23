@@ -58,10 +58,10 @@ void ATDTower::Tick(float DeltaTime)
 	if (!bIsAttackable) return;
 	
 	if (AttackSound) UGameplayStatics::PlaySoundAtLocation(GetWorld(), AttackSound, Target->GetActorLocation());
-	if (AttackEffect && FireEffectReffecencePoint) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), 
+	if (AttackEffect && FireEffectRefferencePoint) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(),
 																			AttackEffect, 
-																			FireEffectReffecencePoint->GetComponentLocation(), 
-																			FireEffectReffecencePoint->GetComponentRotation());
+																			FireEffectRefferencePoint->GetComponentLocation(),
+																			FireEffectRefferencePoint->GetComponentRotation());
 	Target->TakeDamage(AttackDamage, DamageType, nullptr, this);
 	bIsAttackable = false;
 }
