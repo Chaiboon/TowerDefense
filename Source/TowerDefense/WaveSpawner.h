@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "ATDEnemy.h"
+#include "Sound/SoundBase.h"
+#include "Components/AudioComponent.h"
 
 #include "WaveSpawner.generated.h"
 
@@ -37,6 +39,11 @@ public:
 	int32 EnemiesSpawnedInCurrentWave = 0;
 	UPROPERTY()
 	ATDPlayerCharacter* PlayerCharacter;
+	UPROPERTY(EditAnywhere)
+	USoundBase* WaveStartSound;
+	UPROPERTY()
+	UAudioComponent* AudioComponent;
+
 	void AddCountEnemyDeath();
 private:
 	UFUNCTION()

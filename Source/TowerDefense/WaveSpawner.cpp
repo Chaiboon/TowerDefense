@@ -31,6 +31,7 @@ void AWaveSpawner::AddCountEnemyDeath()
 	EnemyDeadCount++;
 	if (EnemyDeadCount >= EnemiesPerWave)
 	{
+		if (AudioComponent) AudioComponent->Stop();
 		EnemyDeadCount = 0;
 		CurrentWave++;
 		
@@ -50,6 +51,11 @@ void AWaveSpawner::AddCountEnemyDeath()
 void AWaveSpawner::SpawnEnemy()
 {
 	if (!EnemyClass) return;
+	if (EnemiesSpawnedInCurrentWave == 0)
+	{
+		if(WaveStartSound) AudioComponent = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), WaveStartSound, GetActorLocation());
+	}
+
 	if (AATDEnemy* SpawnedEnemy = GetWorld()->SpawnActor<AATDEnemy>(EnemyClass, GetActorTransform()))
 	{
 		EnemiesSpawnedInCurrentWave++;

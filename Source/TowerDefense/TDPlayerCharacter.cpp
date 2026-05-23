@@ -166,6 +166,9 @@ void ATDPlayerCharacter::ShowGameOver(bool bWon)
 		GameOverWidget->bDidWin = bWon;
 		GameOverWidget->AddToViewport();
 
+		if (bWon && VictorySound) UGameplayStatics::PlaySoundAtLocation(GetWorld(), VictorySound, GetActorLocation());
+		if (!bWon && DefeatSound) UGameplayStatics::PlaySoundAtLocation(GetWorld(), DefeatSound, GetActorLocation());
+
 		PlayerController->bShowMouseCursor = true;
 		PlayerController->FlushPressedKeys();
 		FInputModeUIOnly InputMode;

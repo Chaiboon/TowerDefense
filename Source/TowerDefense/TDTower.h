@@ -8,6 +8,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "TDTower.generated.h"
 
@@ -29,9 +30,13 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCapsuleComponent* CapsuleComponent;
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* MeshComponent;
+	UStaticMeshComponent* BaseComponent;
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* TurretComponent;
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* SphereComponent;
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* FireEffectRefferencePoint;
 	UPROPERTY(EditAnywhere)
 	float AttackRange = 500.0f;
 	UPROPERTY(EditAnywhere)
@@ -46,12 +51,14 @@ public:
 	USoundBase* AttackSound;
 	int32 GetCost();
 	static const FDamageEvent DamageType;
-	bool bIsAttackable = true;
 	UPROPERTY(EditAnywhere)
 	float RotationSpeed = 3.0f;
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* AttackEffect;
 private:
 	UPROPERTY(EditAnywhere)
 	int32 Cost = 50;
+	bool bIsAttackable = true;
 	FTimerHandle AttackTimerHandle;
 	void AttackCooldown();
 	AActor* GetClosestEnemyInRange(TArray<AActor*> Enemies);

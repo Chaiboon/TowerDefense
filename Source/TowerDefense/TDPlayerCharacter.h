@@ -71,7 +71,10 @@ public:
 	UTDGameOverWidget* GameOverWidget;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ATDTower> TowerClass;
-
+	UPROPERTY(EditAnywhere)
+	USoundBase* VictorySound;
+	UPROPERTY(EditAnywhere)
+	USoundBase* DefeatSound;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

@@ -18,13 +18,17 @@ ATDTower::ATDTower()
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	SetRootComponent(CapsuleComponent);
 
-	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	MeshComponent->SetupAttachment(CapsuleComponent);
+	BaseComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseComponent"));
+	BaseComponent->SetupAttachment(CapsuleComponent);
+
+	TurretComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TurretComponent"));
+	TurretComponent->SetupAttachment(CapsuleComponent);
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponenent"));
 	SphereComponent->SetupAttachment(CapsuleComponent);
 
-	
+	FireEffectRefferencePoint = CreateDefaultSubobject<USceneComponent>(TEXT("FireEffectRefferencePoint"));
+	FireEffectRefferencePoint->SetupAttachment(TurretComponent);
 
 }
 
@@ -46,14 +50,18 @@ void ATDTower::Tick(float DeltaTime)
 	AATDEnemy* Target = Cast<AATDEnemy>(GetClosestEnemyInRange(EnemiesInRange));
 	if (!Target) return;
 
-	FRotator CurrentRotation = this->GetActorRotation();
+	FRotator CurrentRotation = TurretComponent->GetComponentRotation();
 	FRotator TargetLocation = (Target->GetActorLocation() - this->GetActorLocation()).Rotation();
 	FRotator RotationThisTick = FMath::RInterpTo(CurrentRotation, TargetLocation, DeltaTime, RotationSpeed);
-	this->SetActorRotation(RotationThisTick);
+	TurretComponent->SetWorldRotation(RotationThisTick);
 
 	if (!bIsAttackable) return;
 	
 	if (AttackSound) UGameplayStatics::PlaySoundAtLocation(GetWorld(), AttackSound, Target->GetActorLocation());
+	if (AttackEffect && FireEffectReffecencePoint) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), 
+																			AttackEffect, 
+																			FireEffectReffecencePoint->GetComponentLocation(), 
+																			FireEffectReffecencePoint->GetComponentRotation());
 	Target->TakeDamage(AttackDamage, DamageType, nullptr, this);
 	bIsAttackable = false;
 }
